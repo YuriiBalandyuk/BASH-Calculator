@@ -1,0 +1,101 @@
+#!/bin/bash
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+echo "======================================================"
+echo "~ CALCULATOR ~"
+echo "======================================================"
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+if [ ! -e fileout.err ]; then
+  echo "File has created succesffully!" > fileout.err
+fi
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+EXIT_CODE0=0 #Succesffully!
+EXIT_CODE1=1 #Wrong action!
+EXIT_CODE2=2 #Zero value!
+EXIT_CODE3=3 #Wrong number!
+EXIT_CODE4=4 #Wrong letter!
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+function_add () {
+  echo "$1 + $2  = " $(($1+$2))
+}
+
+function_subtract () {
+  echo "$1 - $2  = " $(($1-$2))
+}
+
+function_multiply () {
+  echo "$1 * $2  = " $(($1*$2))
+}
+
+function_divide () {
+  echo "$1 / $2  = " $(($1/$2))
+}
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+echo "Format of arguments: number1/action(a, s, m, d)/number2"
+echo "a - ADD; s - SUBTRACT; m - MULTIPLY; d - DIVIDE"
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+echo "======================================================"
+read -p "Enter numebr1:  " num1
+if [[ ! $num1 =~ ^[0-9]+$ ]]; then
+  echo ""
+  echo "Go back and write the correct number!"
+  echo "======================================================" 
+  echo "Exit code $EXIT_CODE3" >> fileout.err  
+  exit $EXIT_CODE3
+fi
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+echo "======================================================"
+read -p "Enter action: " act
+if [[ ! $act =~ ^[a-zA-Z]+$ ]]; then
+  echo ""
+  echo "a - ADD; s - SUBTRACT; m - MULTIPLY; d - DIVIDE"  
+  echo "Go back and write the correct arguments!" 
+  echo "======================================================"
+  echo "Exit code $EXIT_CODE4" >> fileout.err
+  exit $EXIT_CODE4 
+  
+elif [ $act != "a" ] && [ $act != "s" ] && [ $act != "m" ] && [ $act != "d" ]; then
+  echo ""
+  echo "a - ADD; s - SUBTRACT; m - MULTIPLY; d - DIVIDE"  
+  echo "Go back and write the correct arguments!" 
+  echo "======================================================"
+  echo "Exit code $EXIT_CODE1" >> fileout.err
+  exit $EXIT_CODE1 
+fi
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+echo "======================================================"
+read -p "Enter number2: " num2
+if [[ ! $num2 =~ ^[0-9]+$ ]]; then
+  echo ""  
+  echo "Go back and write the correct number!"
+  echo "======================================================"
+  echo "Exit code $EXIT_CODE3" >> fileout.err 
+  exit $EXIT_CODE3
+  
+elif [ $num2 -eq 0 ]; then
+  echo ""
+  echo "You can't divide by zero!. Go back and write the correct arguments!"
+  echo "======================================================"
+  echo "Exit code $EXIT_CODE2" >> fileout.err
+  exit $EXIT_CODE2
+fi
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+echo "======================================================"
+if [ $act == "a" ]; then
+  function_add $num1 $num2
+  
+elif [ $act == "s" ]; then
+  function_subtract $num1 $num2
+  
+elif [ $act == "m" ]; then
+  function_multiply $num1 $num2
+  
+elif [ $act == "d" ]; then
+  function_divide $num1 $num2
+fi
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+echo "======================================================"
+echo ""
+echo "GoodBye!" 
+echo "======================================================"
+exit $EXIT_CODE0
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
